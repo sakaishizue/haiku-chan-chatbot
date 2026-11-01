@@ -1,1 +1,18 @@
 @import "tailwindcss";
+
+@theme {
+  --color-ink: #1f2933;
+  --color-chat-background: #8fabcf;
+  --color-chat-header: #2f4a6d;
+  --color-chat-haiku: #ffffff;
+  --color-chat-user: #a8e87c;
+  --color-chat-send: #0b7a3b;
+}
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  background: #e7edf5;
+}

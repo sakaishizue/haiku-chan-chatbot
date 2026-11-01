@@ -2,10 +2,11 @@ import Anthropic from "@anthropic-ai/sdk";
 import type { Stream } from "@anthropic-ai/sdk/core/streaming";
 
 import { createChatStream } from "@/lib/anthropic";
-
-const MAX_MESSAGE_LENGTH = 500;
-// 直近 20 往復
-const MAX_HISTORY_MESSAGES = 40;
+import {
+  MAX_ASSISTANT_MESSAGE_LENGTH,
+  MAX_HISTORY_MESSAGES,
+  MAX_USER_MESSAGE_LENGTH,
+} from "@/lib/chat";
 
 const INVALID_REQUEST_MESSAGE =
   "ごめんね、そのメッセージはうまく受け取れなかったみたい…もう一度送ってくれる？";
@@ -38,7 +39,9 @@ function parseMessages(body: unknown): Anthropic.MessageParam[] | null {
     const { role, content } = message;
     if (role !== "user" && role !== "assistant") return null;
     if (typeof content !== "string" || content.trim() === "") return null;
-    if (content.length > MAX_MESSAGE_LENGTH) return null;
+    const maxLength =
+      role === "user" ? MAX_USER_MESSAGE_LENGTH : MAX_ASSISTANT_MESSAGE_LENGTH;
+    if (content.length > maxLength) return null;
     parsed.push({ role, content });
   }
   if (parsed[parsed.length - 1].role !== "user") return null;
