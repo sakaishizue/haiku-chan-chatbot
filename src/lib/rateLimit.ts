@@ -16,7 +16,7 @@ function anonKey(anonId: string): string {
 }
 
 // 日本には夏時間がないので、9 時間ずらすだけで日本時間の日付になる
-function getJstDate(): string {
+export function getJstDate(): string {
   return new Date(Date.now() + JST_OFFSET_MS).toISOString().slice(0, 10);
 }
 
