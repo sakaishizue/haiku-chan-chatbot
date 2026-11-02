@@ -31,12 +31,29 @@ async function readErrorMessage(response: Response): Promise<string> {
   return (await response.text()) || ERROR_MESSAGE;
 }
 
+// 取得できないときは null を返す。残り回数の表示だけの話なので、会話は止めない。
+async function fetchRemaining(): Promise<number | null> {
+  try {
+    const response = await fetch("/api/quota");
+    if (!response.ok) return null;
+    const { remaining } = (await response.json()) as { remaining: number };
+    return remaining;
+  } catch {
+    return null;
+  }
+}
+
 export default function ChatWindow() {
   // 会話はこの state だけで持つので、リロードすると消える
   const [messages, setMessages] = useState<DisplayMessage[]>([GREETING]);
   const [isSending, setIsSending] = useState(false);
+  const [remaining, setRemaining] = useState<number | null>(null);
   const nextId = useRef(1);
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    fetchRemaining().then(setRemaining);
+  }, []);
 
   useEffect(() => {
     const element = scrollRef.current;
@@ -92,6 +109,7 @@ export default function ChatWindow() {
       putReply(reply ? `${reply}\n\n${ERROR_MESSAGE}` : ERROR_MESSAGE, true);
     } finally {
       setIsSending(false);
+      setRemaining(await fetchRemaining());
     }
   }
 
@@ -104,6 +122,9 @@ export default function ChatWindow() {
       <header className="bg-chat-header px-4 py-2 text-white">
         <h1 className="font-bold">ハイクちゃん</h1>
         <p className="text-xs">おしゃべり好きな AI の女の子</p>
+        {remaining !== null && (
+          <p className="text-xs">今日はあと {remaining} 回話せるよ</p>
+        )}
       </header>
 
       <div

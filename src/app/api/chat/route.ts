@@ -1,12 +1,14 @@
 import Anthropic from "@anthropic-ai/sdk";
 import type { Stream } from "@anthropic-ai/sdk/core/streaming";
 
+import { getOrCreateAnonId } from "@/lib/anonId";
 import { createChatStream } from "@/lib/anthropic";
 import {
   MAX_ASSISTANT_MESSAGE_LENGTH,
   MAX_HISTORY_MESSAGES,
   MAX_USER_MESSAGE_LENGTH,
 } from "@/lib/chat";
+import { consumeQuota, logQuotaError } from "@/lib/rateLimit";
 
 const INVALID_REQUEST_MESSAGE =
   "ごめんね、そのメッセージはうまく受け取れなかったみたい…もう一度送ってくれる？";
@@ -14,6 +16,7 @@ const ERROR_MESSAGE =
   "ごめんね、ちょっと調子が悪いみたい…少し待ってからもう一度話しかけてね！";
 const REFUSAL_MESSAGE =
   "ごめんね、その話はちょっとむずかしいかも…別のお話をしようよ！";
+const LIMIT_REACHED_MESSAGE = "今日はもうおしまい、また明日ね！";
 
 function textResponse(message: string, status: number): Response {
   return new Response(message, {
@@ -122,6 +125,17 @@ export async function POST(request: Request): Promise<Response> {
 
   const messages = parseMessages(body);
   if (!messages) return textResponse(INVALID_REQUEST_MESSAGE, 400);
+
+  // 回数を確認できないときは、費用の暴走を防ぐため Claude API を呼ばない
+  try {
+    const anonId = await getOrCreateAnonId();
+    if (!(await consumeQuota(anonId, request))) {
+      return textResponse(LIMIT_REACHED_MESSAGE, 429);
+    }
+  } catch (error) {
+    logQuotaError(error);
+    return textResponse(ERROR_MESSAGE, 500);
+  }
 
   try {
     // 接続時のエラー（認証、レート制限など）はここで投げられるので、エラーのステータスを返せる

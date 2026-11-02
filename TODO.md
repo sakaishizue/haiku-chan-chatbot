@@ -71,19 +71,19 @@
 
 ## フェーズ 4: 回数制限（MongoDB）
 
-- [ ] `src/lib/mongodb.ts`: 接続をキャッシュして使い回す
-- [ ] `usage` コレクションのインデックスを作成する
-  - [ ] `{ key: 1, date: 1 }` のユニークインデックス
-  - [ ] `expiresAt` の TTL インデックス（2 日で削除）
-- [ ] `src/lib/anonId.ts`: 匿名 ID（UUID）を発行し、`httpOnly`・`Secure`・`SameSite=Lax` の Cookie に保存
-- [ ] `src/lib/rateLimit.ts`
-  - [ ] 日本時間で日付（`YYYY-MM-DD`）を求める
-  - [ ] `findOneAndUpdate` + `$inc` + `upsert` で原子的にカウント
-  - [ ] ブラウザごと 1 日 50 回、IP（ソルト付きハッシュ）ごと 1 日 200 回
-- [ ] `/api/chat` の先頭で回数チェックし、上限なら API を呼ばずに 429 とハイクちゃんの定型文を返す
-- [ ] `src/app/api/quota/route.ts`: 残り回数を返す
-- [ ] 画面に「今日はあと N 回話せるよ」を表示し、送信ごとに更新する
-- [ ] `DAILY_LIMIT` を小さくして上限到達時の動作を確認する
+- [x] `src/lib/mongodb.ts`: 接続をキャッシュして使い回す
+- [x] `usage` コレクションのインデックスを作成する
+  - [x] `{ key: 1, date: 1 }` のユニークインデックス
+  - [x] `expiresAt` の TTL インデックス（2 日で削除）
+- [x] `src/lib/anonId.ts`: 匿名 ID（UUID）を発行し、`httpOnly`・`Secure`・`SameSite=Lax` の Cookie に保存
+- [x] `src/lib/rateLimit.ts`
+  - [x] 日本時間で日付（`YYYY-MM-DD`）を求める
+  - [x] `findOneAndUpdate` + `$inc` + `upsert` で原子的にカウント
+  - [x] ブラウザごと 1 日 50 回、IP（ソルト付きハッシュ）ごと 1 日 200 回
+- [x] `/api/chat` の先頭で回数チェックし、上限なら API を呼ばずに 429 とハイクちゃんの定型文を返す
+- [x] `src/app/api/quota/route.ts`: 残り回数を返す
+- [x] 画面に「今日はあと N 回話せるよ」を表示し、送信ごとに更新する
+- [x] `DAILY_LIMIT` を小さくして上限到達時の動作を確認する
 
 **完了条件**: 上限に達すると API が呼ばれず、ハイクちゃんが「また明日ね！」と返す。
 
