@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 80" role="img" aria-label="やったー">
+  <rect width="64" height="80" rx="14" fill="#fff0b8"/>
+  <path d="M12 34C12 18 21 9 32 9s20 9 20 25v15a4 4 0 0 1-4 4H16a4 4 0 0 1-4-4Z" fill="#5b3a29"/>
+  <circle cx="32" cy="34" r="16" fill="#ffe6d2"/>
+  <path d="M16 31c2-11 9-15 16-15s14 4 16 15c-5-1-9-4-11-8-3 5-12 8-21 8Z" fill="#5b3a29"/>
+  <circle cx="21" cy="41" r="2.600" fill="#ffb3c1"/>
+  <circle cx="43" cy="41" r="2.600" fill="#ffb3c1"/>
+  <path d="M22 37q3-4 6 0" fill="none" stroke="#3a2418" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M36 37q3-4 6 0" fill="none" stroke="#3a2418" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M26 42h12c0 8-12 8-12 0Z" fill="#c9505f"/>
+  <path d="M47 13l3.500 2-1 4-4 .5-2-3.500Z" fill="#ff7a9c"/>
+  <path transform="translate(8 18) scale(1)" d="M0-6 1.800-1.800 6 0 1.800 1.800 0 6-1.800 1.800-6 0-1.800-1.800Z" fill="#ffc531"/><path transform="translate(58 12) scale(0.8)" d="M0-6 1.800-1.800 6 0 1.800 1.800 0 6-1.800 1.800-6 0-1.800-1.800Z" fill="#ffc531"/><path transform="translate(60 42) scale(0.6)" d="M0-6 1.800-1.800 6 0 1.800 1.800 0 6-1.800 1.800-6 0-1.800-1.800Z" fill="#ffc531"/>
+  <text x="32" y="70" text-anchor="middle" font-size="11.5" font-weight="700" fill="#3a2418" font-family="'Hiragino Maru Gothic ProN','Yu Gothic','Meiryo',sans-serif">やったー</text>
+</svg>

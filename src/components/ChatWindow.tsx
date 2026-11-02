@@ -6,6 +6,8 @@ import ChatInput from "@/components/ChatInput";
 import MessageBubble from "@/components/MessageBubble";
 import { MAX_HISTORY_MESSAGES } from "@/lib/chat";
 import type { ChatMessage } from "@/lib/chat";
+import { parseAssistantContent, parseUserContent } from "@/lib/stickers";
+import type { DisplayContent } from "@/lib/stickers";
 
 type DisplayMessage = ChatMessage & {
   id: number;
@@ -43,6 +45,10 @@ async function fetchRemaining(): Promise<number | null> {
   }
 }
 
+function toDisplayContent({ role, content }: ChatMessage): DisplayContent {
+  return role === "user" ? parseUserContent(content) : parseAssistantContent(content);
+}
+
 export default function ChatWindow() {
   // 会話はこの state だけで持つので、リロードすると消える
   const [messages, setMessages] = useState<DisplayMessage[]>([GREETING]);
@@ -59,6 +65,17 @@ export default function ChatWindow() {
     const element = scrollRef.current;
     if (element) element.scrollTop = element.scrollHeight;
   }, [messages, isSending]);
+
+  // スタンプ一覧やキーボードが開いて会話の欄が狭くなっても、最新のメッセージを見えるようにする
+  useEffect(() => {
+    const element = scrollRef.current;
+    if (!element) return;
+    const observer = new ResizeObserver(() => {
+      element.scrollTop = element.scrollHeight;
+    });
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, []);
 
   async function handleSend(text: string) {
     const userMessage: DisplayMessage = {
@@ -113,9 +130,14 @@ export default function ChatWindow() {
     }
   }
 
+  const displayMessages = messages
+    .map((message) => ({ ...message, display: toDisplayContent(message) }))
+    // タグだけが届いている途中の返答は、まだ表示するものがない
+    .filter(({ display }) => display.text !== "" || display.sticker);
+
   // 返答の最初の文字が届くまでは「入力中…」の吹き出しを出す
   const isWaitingForReply =
-    isSending && messages[messages.length - 1]?.role === "user";
+    isSending && displayMessages[displayMessages.length - 1]?.role === "user";
 
   return (
     <div className="mx-auto flex h-dvh w-full max-w-lg flex-col bg-chat-background">
@@ -133,9 +155,9 @@ export default function ChatWindow() {
         aria-label="会話"
         className="flex flex-1 flex-col gap-3 overflow-y-auto p-3"
       >
-        {messages.map((message) => (
-          <MessageBubble key={message.id} role={message.role}>
-            {message.content}
+        {displayMessages.map(({ id, role, display }) => (
+          <MessageBubble key={id} role={role} sticker={display.sticker}>
+            {display.text}
           </MessageBubble>
         ))}
         {isWaitingForReply && (

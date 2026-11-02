@@ -4,6 +4,7 @@ import {
   MAX_USER_MESSAGE_LENGTH,
 } from "@/lib/chat";
 import type { ChatMessage } from "@/lib/chat";
+import { isUnknownStickerTag } from "@/lib/stickers";
 
 // 不正な入力なら null を返す。余分なフィールドは API に渡さない。
 export function parseMessages(body: unknown): ChatMessage[] | null {
@@ -24,6 +25,8 @@ export function parseMessages(body: unknown): ChatMessage[] | null {
     const maxLength =
       role === "user" ? MAX_USER_MESSAGE_LENGTH : MAX_ASSISTANT_MESSAGE_LENGTH;
     if (content.length > maxLength) return null;
+    // ハイクちゃんの返答に一覧にないタグがあっても、画面で無視するので拒否しない
+    if (role === "user" && isUnknownStickerTag(content)) return null;
     parsed.push({ role, content });
   }
   if (parsed[parsed.length - 1].role !== "user") return null;

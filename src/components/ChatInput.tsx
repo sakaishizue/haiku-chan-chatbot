@@ -1,9 +1,12 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import type { FormEvent, KeyboardEvent } from "react";
 
 import { MAX_USER_MESSAGE_LENGTH } from "@/lib/chat";
+import { STICKERS, stickerTag } from "@/lib/stickers";
+import type { Sticker } from "@/lib/stickers";
 
 type Props = {
   disabled: boolean;
@@ -17,6 +20,7 @@ function isTouchDevice(): boolean {
 
 export default function ChatInput({ disabled, onSend }: Props) {
   const [text, setText] = useState("");
+  const [isPickerOpen, setIsPickerOpen] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const isTooLong = text.length > MAX_USER_MESSAGE_LENGTH;
@@ -31,6 +35,13 @@ export default function ChatInput({ disabled, onSend }: Props) {
     if (!canSend) return;
     onSend(text);
     setText("");
+  }
+
+  // 入力途中の文章は消さない
+  function sendSticker(sticker: Sticker) {
+    if (disabled) return;
+    setIsPickerOpen(false);
+    onSend(stickerTag(sticker));
   }
 
   function handleSubmit(event: FormEvent) {
@@ -49,7 +60,44 @@ export default function ChatInput({ disabled, onSend }: Props) {
 
   return (
     <form onSubmit={handleSubmit} className="bg-white px-3 pt-2 pb-3">
+      {isPickerOpen && (
+        <div
+          id="sticker-picker"
+          role="group"
+          aria-label="スタンプ一覧"
+          className="mb-2 grid grid-cols-4 gap-2"
+        >
+          {STICKERS.map((sticker) => (
+            <button
+              key={sticker.id}
+              type="button"
+              onClick={() => sendSticker(sticker)}
+              disabled={disabled}
+              aria-label={`${sticker.label}のスタンプを送る`}
+              className="flex justify-center rounded-xl p-1 hover:bg-slate-100 focus-visible:ring-2 focus-visible:ring-chat-send focus-visible:outline-none disabled:opacity-50"
+            >
+              <Image
+                src={sticker.src}
+                alt=""
+                width={64}
+                height={80}
+                className="h-20 w-16"
+              />
+            </button>
+          ))}
+        </div>
+      )}
       <div className="flex items-end gap-2">
+        <button
+          type="button"
+          onClick={() => setIsPickerOpen((isOpen) => !isOpen)}
+          aria-label={isPickerOpen ? "スタンプ一覧を閉じる" : "スタンプ一覧を開く"}
+          aria-expanded={isPickerOpen}
+          aria-controls="sticker-picker"
+          className={`flex size-10 shrink-0 items-center justify-center rounded-full focus-visible:ring-2 focus-visible:ring-chat-send focus-visible:outline-none ${isPickerOpen ? "bg-slate-200" : "bg-slate-100"}`}
+        >
+          <Image src="/haiku-chan.svg" alt="" width={28} height={28} />
+        </button>
         <textarea
           ref={textareaRef}
           value={text}

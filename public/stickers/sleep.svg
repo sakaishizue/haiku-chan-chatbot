@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 80" role="img" aria-label="おやすみ">
+  <rect width="64" height="80" rx="14" fill="#d9d2f5"/>
+  <path d="M12 34C12 18 21 9 32 9s20 9 20 25v15a4 4 0 0 1-4 4H16a4 4 0 0 1-4-4Z" fill="#5b3a29"/>
+  <circle cx="32" cy="34" r="16" fill="#ffe6d2"/>
+  <path d="M16 31c2-11 9-15 16-15s14 4 16 15c-5-1-9-4-11-8-3 5-12 8-21 8Z" fill="#5b3a29"/>
+  <circle cx="21" cy="41" r="2.600" fill="#ffb3c1"/>
+  <circle cx="43" cy="41" r="2.600" fill="#ffb3c1"/>
+  <path d="M22 36q3 3 6 0" fill="none" stroke="#3a2418" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M36 36q3 3 6 0" fill="none" stroke="#3a2418" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M30 43q2 1.500 4 0" fill="none" stroke="#c9505f" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M47 13l3.500 2-1 4-4 .5-2-3.500Z" fill="#ff7a9c"/>
+  <text x="52" y="16" font-size="12" font-weight="700" fill="#5a4bb8" font-family="sans-serif">Z</text><text x="60" y="8" font-size="8" font-weight="700" fill="#5a4bb8" font-family="sans-serif">z</text><path d="M9 10a7 7 0 1 0 6 11 8 8 0 0 1-6-11Z" fill="#ffc531"/>
+  <text x="32" y="70" text-anchor="middle" font-size="11.5" font-weight="700" fill="#3a2418" font-family="'Hiragino Maru Gothic ProN','Yu Gothic','Meiryo',sans-serif">おやすみ</text>
+</svg>
