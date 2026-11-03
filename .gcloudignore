@@ -1,0 +1,25 @@
+# Cloud Build に送らないファイル。Dockerfile と .dockerignore はビルドに使うので除外しない。
+
+# 秘密情報をクラウドに送らない
+.env*
+!.env.example
+*.pem
+
+# 依存関係とビルド結果はイメージの中で作り直す
+node_modules/
+.next/
+out/
+build/
+coverage/
+*.tsbuildinfo
+next-env.d.ts
+
+# 実行にもビルドにも使わないもの
+.git/
+.gitignore
+.gcloudignore
+*.md
+.claude/
+.playwright-mcp/
+.vercel/
+npm-debug.log*

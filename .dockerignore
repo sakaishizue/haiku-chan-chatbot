@@ -1,0 +1,25 @@
+# 依存関係とビルド結果はイメージの中で作り直す
+node_modules
+.next
+out
+build
+coverage
+*.tsbuildinfo
+next-env.d.ts
+
+# 秘密情報をイメージに入れない
+.env*
+!.env.example
+*.pem
+
+# 実行にもビルドにも使わないもの
+.git
+.gitignore
+.dockerignore
+.gcloudignore
+Dockerfile
+*.md
+.claude
+.playwright-mcp
+.vercel
+npm-debug.log*

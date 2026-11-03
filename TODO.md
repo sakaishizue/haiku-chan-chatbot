@@ -115,15 +115,16 @@
 
 ## フェーズ 6: Cloud Run へのデプロイ
 
-- [ ] マルチステージの `Dockerfile` を作成する（standalone 出力、`PORT=8080`）
-- [ ] `.dockerignore` を作成する（`node_modules`、`.next`、`.env*` など）
+- [x] マルチステージの `Dockerfile` を作成する（standalone 出力、`PORT=8080`）
+- [x] `.dockerignore` を作成する（`node_modules`、`.next`、`.env*` など）
 - [ ] ローカルで Docker イメージをビルドして起動確認する
 - [ ] 👤 Google Cloud で Cloud Run・Artifact Registry・Secret Manager の API を有効にする
 - [ ] 👤 Secret Manager に `ANTHROPIC_API_KEY` `MONGODB_URI` `IP_HASH_SALT` を登録する
 - [ ] Artifact Registry にイメージを push する
 - [ ] Cloud Run にデプロイする（リージョン `asia-northeast1`、`--max-instances=3`、シークレットを環境変数として渡す）
-- [ ] 👤 MongoDB Atlas のネットワークアクセスを Cloud Run から接続できるよう設定する
+- [ ] 👤 MongoDB Atlas のネットワークアクセスを `0.0.0.0/0`（どこからでも許可）にし、データベースユーザーを強いランダムなパスワードにする（Cloud Run の接続元 IP は固定されないため）
 - [ ] 本番 URL で会話・ストリーミング・回数制限を確認する
+- [ ] 本番で `X-Forwarded-For` の末尾が接続元の IP か確認する（違うと全員が同じ IP として数えられ、1 日 200 回で全員止まる）
 
 **完了条件**: 公開 URL でハイクちゃんと会話でき、回数制限が効いている。
 

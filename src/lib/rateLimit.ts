@@ -20,8 +20,8 @@ export function getJstDate(): string {
   return new Date(Date.now() + JST_OFFSET_MS).toISOString().slice(0, 10);
 }
 
-// Cloud Run は実際の接続元を X-Forwarded-For の末尾に追加する。
-// 先頭側はクライアントが自由に書けるので使わない。
+// X-Forwarded-For の先頭側はクライアントが自由に書けるので使わず、末尾を接続元とする。
+// Cloud Run で末尾が本当に接続元になっているかは、公式の記述が見つからないので本番で確認する（TODO.md）。
 function getClientIp(request: Request): string {
   const forwardedFor = request.headers.get("x-forwarded-for");
   return forwardedFor?.split(",").at(-1)?.trim() || "unknown";
